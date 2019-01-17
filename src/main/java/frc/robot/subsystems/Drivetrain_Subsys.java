@@ -33,18 +33,22 @@ public class Drivetrain_Subsys extends PIDSubsystem
     frontRight= new CANSparkMax(RobotMap.frontRight, MotorType.kBrushless);
     backRight = new CANSparkMax(RobotMap.backRight, MotorType.kBrushless);
 
-    frontRight.setInverted(true);
-    backRight.setInverted(true);
+    frontLeft.setInverted(true);
+    backLeft.setInverted(true);
 
-    backLeft.follow(frontLeft);
-    backRight.follow(frontRight);
+    //backLeft.follow(frontLeft);
+    //backRight.follow(frontRight);
 
   }
 
-  public void drive(double x, double y)
+  public void drive(double y, double x)
   {
-    double leftPower  = y - x;
-    double rightPower = y + x;
+    double sensFactor = 0.75D;
+
+    double yValPrime = Math.pow((sensFactor*y), 3) + ((1-sensFactor)*y);
+    double xValPrime = Math.pow((sensFactor*x), 3) + ((1-sensFactor)*x);
+    double leftPower  =  yValPrime - xValPrime;
+    double rightPower =  yValPrime + xValPrime;
 
     set(leftPower, rightPower);
   }
@@ -53,7 +57,9 @@ public class Drivetrain_Subsys extends PIDSubsystem
   private void set(double left, double right)
   {
     frontLeft.set(left);
+    backLeft.set(left);
     frontRight.set(right);
+    backRight.set(right);
   }
 
   public double returnPIDInput()
@@ -68,9 +74,14 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
   public void logSpeed()
   {
-    System.out.print(frontLeft.get());
+    //System.out.println(frontLeft.get());
     System.out.println(frontRight.get());
   } 
+
+  public void force()
+  {
+    set(0, 1);
+  }
 
   //all methods above this point
   public static Drivetrain_Subsys getInstance()
