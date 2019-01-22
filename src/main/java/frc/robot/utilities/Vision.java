@@ -40,9 +40,11 @@ public class Vision
     {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
     }
-
-    public void AimingAssistBall() {
-        if (v == 1) {
+    public void changepipeline(int Pipeline){
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(Pipeline);
+    }
+    public void BallFollower() {
+        if (v == 1 && x < -15 && x > 15) {
             
         }
     }
