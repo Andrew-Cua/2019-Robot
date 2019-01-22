@@ -1,5 +1,6 @@
 package frc.robot.utilities;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -20,6 +21,7 @@ public class Vision
     NetworkTableEntry ta1 = limelight.getEntry("ta1");
     //Area (0% of image to 100% of image) (Dont Use)
     private double x,y,area,v;
+    
     public Vision()
     {
         
@@ -44,8 +46,15 @@ public class Vision
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(Pipeline);
     }
     public void BallFollower() {
-        if (v == 1 && x < -15 && x > 15) {
-            
+        changepipeline(3);
+        if (v == 1 && x > -5 && x < 5) {
+            Robot.drivetrain_Subsys.set(.5, .5);
+        } else if (v == 1 && x > 5) {
+            Robot.drivetrain_Subsys.set(.25, -.25);
+        } else if (v == 1 && x < -5) {
+            Robot.drivetrain_Subsys.set(-.25, .25);
+        } else {
+            System.out.println("You messed up Prick!!!");
         }
     }
 
