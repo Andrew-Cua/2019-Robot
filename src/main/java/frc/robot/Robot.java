@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain_Subsys;
-import frc.robot.subsystems.Elevator_Subsys;
+import frc.robot.subsystems.Arm_Subsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake_Subsys;
 import frc.robot.subsystems.Superstructure_Subsys;
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
   public static Drivetrain_Subsys drivetrain_Subsys;
-  public static Elevator_Subsys elevator_Subsys;
+  public static Arm_Subsys arm_Subsys;
   public static Intake_Subsys intake_Subsys;
   public static Superstructure_Subsys superstructure_Subsys;
   public static Vision limeLight;
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_oi = new OI();
     drivetrain_Subsys = Drivetrain_Subsys.getInstance();
-    elevator_Subsys = Elevator_Subsys.getInstance();
+    arm_Subsys = Arm_Subsys.getInstance();
     intake_Subsys = Intake_Subsys.getInstance();
     superstructure_Subsys = Superstructure_Subsys.getInstance();
     limeLight = new Vision();
@@ -120,7 +120,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    //Scheduler.getInstance().run();
+    drivetrain_Subsys.positionControl(Conversions.WHEEL_CIRCUMFERENCE);
   }
 
   @Override
@@ -141,6 +142,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     limeLight.readValues();
+    //drivetrain_Subsys.force();
   }
 
   /**
