@@ -46,15 +46,19 @@ public class Vision
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(Pipeline);
     }
     public void BallFollower() {
-        changepipeline(3);
-        if (v == 1 && x > -5 && x < 5) {
+        //changepipeline(3);
+
+        if((int)v > 0){System.out.println("i see a ball");}
+        else{System.out.println("i dont see anything prick");}
+        if ((int)v == 1 && x > -5 && x < 5) {
             Robot.drivetrain_Subsys.set(.5, .5);
         } else if (v == 1 && x > 5) {
             Robot.drivetrain_Subsys.set(.25, -.25);
         } else if (v == 1 && x < -5) {
             Robot.drivetrain_Subsys.set(-.25, .25);
         } else {
-            System.out.println("You messed up Prick!!!");
+            //System.out.println("You messed up Prick!!!");
+            Robot.drivetrain_Subsys.set(0,0);
         }
     }
 
