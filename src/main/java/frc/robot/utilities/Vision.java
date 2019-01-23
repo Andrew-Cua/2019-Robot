@@ -9,57 +9,83 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 //Blue balance 1975
 public class Vision
 {
-    NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = limelight.getEntry("tx");
+    private NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+    private NetworkTableEntry tx = limelight.getEntry("tx");
     //Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    NetworkTableEntry ty = limelight.getEntry("ty");
+    private NetworkTableEntry ty = limelight.getEntry("ty");
     //Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-    NetworkTableEntry tv = limelight.getEntry("tv");
+    private NetworkTableEntry tv = limelight.getEntry("tv");
     //Whether the limelight has any valid targets (0 or 1)
-    NetworkTableEntry ta = limelight.getEntry("ta");
+    private NetworkTableEntry ta = limelight.getEntry("ta");
     //Target Area (0% of image to 100% of image)
-    NetworkTableEntry ta1 = limelight.getEntry("ta1");
+    private NetworkTableEntry ta1 = limelight.getEntry("ta1");
     //Area (0% of image to 100% of image) (Dont Use)
-    private double x,y,area,v;
+    private NetworkTableEntry tp = limelight.getEntry("pipeline");
+    private double x, y, area, v, currentPipeline, tempPipline ;
     
     public Vision()
     {
         
     }
 
-    public void readValues()
+    public void updateVision()
     {
+        //changes pipelines if there is a difference between ints 
+        if(tempPipeline != currentPipline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
         this.x = tx.getDouble(0.0);
         this.y = ty.getDouble(0.0);
         this.area = ta.getDouble(0.0);
         this.v = tv.getDouble(0);
+        this.pipeline = tp.getNumber(0);
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("Limelightv", v);
+        SmartDashboard.putNumber("Current Pipeline", pipeline);
+
+        
     }
     public void changeCamMode(int mode)
     {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
     }
-    public void changepipeline(int Pipeline){
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(Pipeline);
+    public void changePipeline(int pipeline){
+        this.tempPipeline = pipeline;
+    }
+    public int getCurrentPipeline()
+    {
+        return curretnPipeline;
     }
     public void BallFollower() {
-        //changepipeline(3);
+        if(getCurrentPipeline() != 3){changePipeline(3);}
 
-        if((int)v > 0){System.out.println("i see a ball");}
-        else{System.out.println("i dont see anything prick");}
-        if ((int)v == 1 && x > -5 && x < 5) {
-            Robot.drivetrain_Subsys.set(.5, .5);
-        } else if (v == 1 && x > 5) {
-            Robot.drivetrain_Subsys.set(.25, -.25);
-        } else if (v == 1 && x < -5) {
-            Robot.drivetrain_Subsys.set(-.25, .25);
-        } else {
-            //System.out.println("You messed up Prick!!!");
-            Robot.drivetrain_Subsys.set(0,0);
+        double leftPower = 0, rightPower = 0;
+        if(v != 1)//checks if a target is in view
+        {
+            System.out.println("nothing is being seen");
+            System.out.println("Current Value V: " + v);
+
+            return;//exits method if nothing is seen and gives current value of "v"
         }
+        //allows for only one method call and increased readability by making left and right power exist
+        if (v != 0 && x > -5 && x < 5)
+        {
+            leftPower  = 0.5;
+            rightPower = 0.5;
+            
+        } else if (v == 1 && x > 5)
+        {
+            leftPower  =  0.25;
+            rightPower = -0.25;
+
+        } else if (v == 1 && x < -5) 
+        {
+            leftPower  = -0.25;
+            rightPower = 0.25;
+        } 
+
+        Robot.drivetrain_Subsys.set(leftPower, rightPower);
+
     }
 
 }
