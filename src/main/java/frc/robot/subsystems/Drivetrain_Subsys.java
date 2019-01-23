@@ -34,8 +34,8 @@ public class Drivetrain_Subsys extends PIDSubsystem
     frontRight= new E3SparkMax(RobotMap.frontRight);
     backRight = new E3SparkMax(RobotMap.backRight);
 
-    frontLeft.setInverted(true);
-    backLeft.setInverted(true);
+    frontRight.setInverted(true);
+    backRight.setInverted(true);
 
     frontLeft.setPIDConsts(0, 0.05, 0, 0);
     frontRight.setPIDConsts(0, 0.05, 0, 0);
@@ -56,8 +56,8 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
     double yValPrime = Math.pow((sensFactor*y), 3) + ((1-sensFactor)*y);
     double xValPrime = Math.pow((sensFactor*x), 3) + ((1-sensFactor)*x);
-    double leftPower  =  yValPrime + xValPrime;
-    double rightPower =  yValPrime - xValPrime;
+    double leftPower  =  yValPrime - xValPrime;
+    double rightPower =  yValPrime + xValPrime;
 
     set(leftPower, rightPower);
   }

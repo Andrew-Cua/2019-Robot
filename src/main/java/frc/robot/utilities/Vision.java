@@ -21,7 +21,7 @@ public class Vision
     private NetworkTableEntry ta1 = limelight.getEntry("ta1");
     //Area (0% of image to 100% of image) (Dont Use)
     private NetworkTableEntry tp = limelight.getEntry("pipeline");
-    private double x, y, area, v, currentPipeline, tempPipline ;
+    private double x, y, area, v, currentPipeline, tempPipeline ;
     
     public Vision()
     {
@@ -31,17 +31,17 @@ public class Vision
     public void updateVision()
     {
         //changes pipelines if there is a difference between ints 
-        if(tempPipeline != currentPipline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
+        if(tempPipeline != currentPipeline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
         this.x = tx.getDouble(0.0);
         this.y = ty.getDouble(0.0);
         this.area = ta.getDouble(0.0);
         this.v = tv.getDouble(0);
-        this.pipeline = tp.getNumber(0);
+        this.currentPipeline = tp.getDouble(0);
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("Limelightv", v);
-        SmartDashboard.putNumber("Current Pipeline", pipeline);
+        SmartDashboard.putNumber("Current Pipeline", currentPipeline);
 
         
     }
@@ -52,9 +52,9 @@ public class Vision
     public void changePipeline(int pipeline){
         this.tempPipeline = pipeline;
     }
-    public int getCurrentPipeline()
+    public double getCurrentPipeline()
     {
-        return curretnPipeline;
+        return currentPipeline;
     }
     public void BallFollower() {
         if(getCurrentPipeline() != 3){changePipeline(3);}
