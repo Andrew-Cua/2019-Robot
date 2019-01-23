@@ -32,6 +32,7 @@ public class Vision
     {
         //changes pipelines if there is a difference between ints 
         if(tempPipeline != currentPipeline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
         this.x = tx.getDouble(0.0);
         this.y = ty.getDouble(0.0);
         this.area = ta.getDouble(0.0);
@@ -41,7 +42,7 @@ public class Vision
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("Limelightv", v);
-        SmartDashboard.putNumber("Current Pipeline", currentPipeline);
+        SmartDashboard.putNumber("Current Pipeline", NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0));
 
         
     }
@@ -68,20 +69,20 @@ public class Vision
             return;//exits method if nothing is seen and gives current value of "v"
         }
         //allows for only one method call and increased readability by making left and right power exist
-        if (v != 0 && x > -5 && x < 5)
-        {
-            leftPower  = 0.5;
-            rightPower = 0.5;
-            
-        } else if (v == 1 && x > 5)
-        {
-            leftPower  =  0.25;
-            rightPower = -0.25;
-
-        } else if (v == 1 && x < -5) 
+        if (v != 0 && x > -7.5 && x < 7.5)
         {
             leftPower  = -0.25;
-            rightPower = 0.25;
+            rightPower = -0.25;
+            
+        } else if (v == 1 && x > 7.5)
+        {
+            leftPower  =  -0.075;
+            rightPower =  0.075;
+
+        } else if (v == 1 && x < -7.5) 
+        {
+            leftPower  = 0.075;
+            rightPower = -0.075;
         } 
 
         Robot.drivetrain_Subsys.set(leftPower, rightPower);
