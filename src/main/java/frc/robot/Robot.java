@@ -19,6 +19,9 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake_Subsys;
 import frc.robot.subsystems.Superstructure_Subsys;
 import frc.robot.utilities.*;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,6 +38,8 @@ public class Robot extends TimedRobot {
   public static Intake_Subsys intake_Subsys;
   public static Superstructure_Subsys superstructure_Subsys;
   public static Vision limeLight;
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -45,12 +50,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_oi = new OI();
+    
     drivetrain_Subsys = Drivetrain_Subsys.getInstance();
     arm_Subsys = Arm_Subsys.getInstance();
     intake_Subsys = Intake_Subsys.getInstance();
     superstructure_Subsys = Superstructure_Subsys.getInstance();
     limeLight = new Vision();
+    m_oi = new OI();
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -128,6 +134,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    limeLight.changepipeline(3);
   }
 
   /**
