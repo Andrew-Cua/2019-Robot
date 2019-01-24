@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.utilities.E3SparkMax;
 import frc.robot.commands.*;
+import frc.robot.*;
 public class Drivetrain_Subsys extends PIDSubsystem 
 {
 
@@ -98,6 +99,43 @@ public class Drivetrain_Subsys extends PIDSubsystem
     set(1,1);
   }
 
+  public void BallFollower() 
+  {
+    if(Robot.limeLight.getCurrentPipeline() != 3){Robot.limeLight.changePipeline(3);}
+
+    double leftPower = 0, rightPower = 0;
+    if(Robot.limeLight.getV() != 1)//checks if a target is in view
+    {
+        System.out.println("nothing is being seen");
+        System.out.println("Current Value V: " + Robot.limeLight.getV());
+
+        return;//exits method if nothing is seen and gives current value of "v"
+    }
+    //allows for only one method call and increased readability by making left and right power exist
+    if (Robot.limeLight.getV() != 0 && Robot.limeLight.getX() > -7.5 && Robot.limeLight.getX() < 7.5)
+    {
+        leftPower  = -0.25;
+        rightPower = -0.25;
+        
+    } else if (Robot.limeLight.getV() == 1 && Robot.limeLight.getX() > 7.5)
+    {
+        leftPower  =  -0.075;
+        rightPower =  0.075;
+
+    } else if (Robot.limeLight.getV() == 1 && Robot.limeLight.getX() < -7.5) 
+    {
+        leftPower  = 0.075;
+        rightPower = -0.075;
+    } 
+
+    Robot.drivetrain_Subsys.set(leftPower, rightPower);
+
+  }
+
+  public void seekBall()
+  {
+    
+  }
   //all methods above this point
   public static Drivetrain_Subsys getInstance()
   {

@@ -57,36 +57,19 @@ public class Vision
     {
         return currentPipeline;
     }
-    public void BallFollower() {
-        if(getCurrentPipeline() != 3){changePipeline(3);}
-
-        double leftPower = 0, rightPower = 0;
-        if(v != 1)//checks if a target is in view
-        {
-            System.out.println("nothing is being seen");
-            System.out.println("Current Value V: " + v);
-
-            return;//exits method if nothing is seen and gives current value of "v"
-        }
-        //allows for only one method call and increased readability by making left and right power exist
-        if (v != 0 && x > -7.5 && x < 7.5)
-        {
-            leftPower  = -0.25;
-            rightPower = -0.25;
-            
-        } else if (v == 1 && x > 7.5)
-        {
-            leftPower  =  -0.075;
-            rightPower =  0.075;
-
-        } else if (v == 1 && x < -7.5) 
-        {
-            leftPower  = 0.075;
-            rightPower = -0.075;
-        } 
-
-        Robot.drivetrain_Subsys.set(leftPower, rightPower);
-
+    public double getV()
+    {
+        return v;
     }
+    public double getX()
+    {
+        return x;
+    }
+    public double getY()
+    {
+        return y;
+    }
+
+    
 
 }
