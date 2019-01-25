@@ -48,7 +48,7 @@ public class Vision
     {
         //changes pipelines if there is a difference between ints 
         //if(tempPipeline != currentPipeline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
+        //NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
         this.x = tx.getDouble(0.0);
         this.y = ty.getDouble(0.0);
         this.area = ta.getDouble(0.0);

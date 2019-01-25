@@ -25,7 +25,7 @@ public class OI {
   {
     ballFollowerButton = new JoystickButton(driveStick, 7);
     ballSeekerButton   = new JoystickButton(driveStick, 12);
-    drivePipelineButton = new JoystickButton(driveStick, 3);
+    drivePipelineButton = new JoystickButton(driveStick, 2);
     drivePipelineButton.whenPressed(new ChangeToDrivePipelineCommand());
     ballFollowerButton.whileHeld(new BallFollower());
     ballSeekerButton.whileHeld(new SeekBallCommand());
