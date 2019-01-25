@@ -2,11 +2,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.RobotMap;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,7 +24,7 @@ public class Drivetrain_Subsys extends PIDSubsystem
                       backLeft,
                       frontRight,
                       backRight;
-  private AHRS Navx = new AHRS(I2C.Port.kMXP);
+  private AHRS Navx;
 
   private double kP = 0,
                  kI = 0,
@@ -30,6 +32,17 @@ public class Drivetrain_Subsys extends PIDSubsystem
   private Drivetrain_Subsys()
   {
     super("Drivetrain", 0.005, 0, 0);
+
+    getPIDController().setInputRange(-180, 180);  
+    getPIDController().setOutputRange(-1,1);
+    getPIDController().setAbsoluteTolerance(2);
+    getPIDController().setContinuous(true);
+    
+    try {
+      this.Navx = new AHRS(SPI.Port.kMXP);
+    } catch (Exception e) {
+      //TODO: handle exception
+    }
 
     frontLeft = new E3SparkMax(RobotMap.frontLeft);
     backLeft  = new E3SparkMax(RobotMap.backLeft);
@@ -78,9 +91,10 @@ public class Drivetrain_Subsys extends PIDSubsystem
     return Navx.getAngle();
   }
 
-  public void usePIDOutput(double input)
+  public void usePIDOutput(double output)
   {
-
+    frontLeft.pidWrite(output);
+    frontRight.pidWrite(output);
   }
 
   public void logSpeed()
@@ -146,7 +160,6 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
     if(v)
     {
-      double headingError = x;
       double headingAjust = x*kP;
 
       double leftPower = power - headingAjust;
