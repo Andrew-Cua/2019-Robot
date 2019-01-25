@@ -19,6 +19,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake_Subsys;
 import frc.robot.subsystems.Superstructure_Subsys;
 import frc.robot.utilities.*;
+import frc.robot.utilities.Vision.PipelineMode;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -134,8 +135,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    limeLight.changePipeline(3);
-  }
+    limeLight.setTrackTarget(PipelineMode.NormalMode);
+    }
 
   /**
    * This function is called periodically during operator control.

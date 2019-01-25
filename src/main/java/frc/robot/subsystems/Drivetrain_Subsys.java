@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.utilities.E3SparkMax;
+import frc.robot.utilities.Vision.PipelineMode;
 import frc.robot.commands.*;
 import frc.robot.*;
 public class Drivetrain_Subsys extends PIDSubsystem 
@@ -28,7 +29,7 @@ public class Drivetrain_Subsys extends PIDSubsystem
                  kD = 0;
   private Drivetrain_Subsys()
   {
-    super("Drivetrain", 0, 0, 0);
+    super("Drivetrain", 0.005, 0, 0);
 
     frontLeft = new E3SparkMax(RobotMap.frontLeft);
     backLeft  = new E3SparkMax(RobotMap.backLeft);
@@ -101,7 +102,7 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
   public void BallFollower() 
   {
-    if(Robot.limeLight.getCurrentPipeline() != 3){Robot.limeLight.changePipeline(3);}
+    Robot.limeLight.setTrackTarget(PipelineMode.BallMode);
 
     double leftPower = 0, rightPower = 0;
     if(Robot.limeLight.getV() != 1)//checks if a target is in view
@@ -134,6 +135,26 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
   public void seekBall()
   {
+    Robot.limeLight.setTrackTarget(PipelineMode.BallMode);
+    double kP = 0.0052;
+    double x = Robot.limeLight.getX();
+    double y = Robot.limeLight.getY();
+    boolean v = Robot.limeLight.getV() != 0;
+
+    double power = -0.20; 
+    if(!v){return;}
+
+    if(v)
+    {
+      double headingError = x;
+      double headingAjust = x*kP;
+
+      double leftPower = power - headingAjust;
+      double rightPower = power + headingAjust;
+
+      set(leftPower, rightPower);
+    }
+
     
   }
   //all methods above this point

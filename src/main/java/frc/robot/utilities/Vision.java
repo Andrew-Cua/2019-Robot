@@ -21,7 +21,23 @@ public class Vision
     private NetworkTableEntry ta1 = limelight.getEntry("ta1");
     //Area (0% of image to 100% of image) (Dont Use)
     private NetworkTableEntry tp = limelight.getEntry("pipeline");
-    private double x, y, area, v, currentPipeline, tempPipeline ;
+    private double x, y, area, v, currentPipeline;
+    private final double pipelineMax = 3;
+    private final double pipelineMin = 1;
+
+    public static enum PipelineMode
+    {
+        NormalMode(1), GoalMode(2), BallMode(3);
+        private int pipeline;
+        PipelineMode(int pipeline)
+        {
+            this.pipeline = pipeline;
+        }
+        int getPipeline()
+        {
+            return pipeline;
+        }
+    }
     
     public Vision()
     {
@@ -31,7 +47,7 @@ public class Vision
     public void updateVision()
     {
         //changes pipelines if there is a difference between ints 
-        if(tempPipeline != currentPipeline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
+        //if(tempPipeline != currentPipeline){NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(this.tempPipeline);}
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
         this.x = tx.getDouble(0.0);
         this.y = ty.getDouble(0.0);
@@ -42,16 +58,39 @@ public class Vision
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("Limelightv", v);
-        SmartDashboard.putNumber("Current Pipeline", NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0));
+        SmartDashboard.putNumber("Limelight pLine",tp.getDouble(0));
+       // SmartDashboard.putNumber("the pipeline i want", tempPipeline);
+        
 
         
     }
-    public void changeCamMode(int mode)
+    public void setCamMode(int mode)
     {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
     }
-    public void changePipeline(int pipeline){
-        this.tempPipeline = pipeline;
+    private void setPipeline(double pipeline){
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
+    }
+    public void setTrackTarget(PipelineMode target)
+    {
+        switch(target)
+        {
+            case NormalMode:
+                if(currentPipeline != 1){setPipeline(target.getPipeline());}
+                currentPipeline = 1;
+                SmartDashboard.putNumber("Pipeline", target.getPipeline());
+                break;
+            case GoalMode:
+                if(currentPipeline != 2){setPipeline(target.getPipeline());}
+                currentPipeline = 2;
+                SmartDashboard.putNumber("Pipeline", target.getPipeline());
+                break;
+            case BallMode:
+                if(currentPipeline != 3){setPipeline(target.getPipeline());}
+                currentPipeline = 3;
+                SmartDashboard.putNumber("Pipeline", target.getPipeline());
+                break;
+        }
     }
     public double getCurrentPipeline()
     {
@@ -68,6 +107,10 @@ public class Vision
     public double getY()
     {
         return y;
+    }
+    public void changeToDrive()
+    {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
     }
 
     

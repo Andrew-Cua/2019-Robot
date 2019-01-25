@@ -19,10 +19,16 @@ import frc.robot.commands.*;
 public class OI {
 
   private JoystickButton ballFollowerButton;
+  private JoystickButton ballSeekerButton;
+  private JoystickButton drivePipelineButton;
   public OI()
   {
     ballFollowerButton = new JoystickButton(driveStick, 7);
+    ballSeekerButton   = new JoystickButton(driveStick, 12);
+    drivePipelineButton = new JoystickButton(driveStick, 3);
+    drivePipelineButton.whenPressed(new ChangeToDrivePipelineCommand());
     ballFollowerButton.whileHeld(new BallFollower());
+    ballSeekerButton.whileHeld(new SeekBallCommand());
   }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
