@@ -16,19 +16,20 @@ public class TurnToAngleCommand extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.drivetrain_Subsys);
-    this.angle = angle;
+    //this.angle = angle;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    //Robot.drivetrain_Subsys.resetNavx();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     Robot.drivetrain_Subsys.enable();
-    Robot.drivetrain_Subsys.setSetpointRelative(this.angle);
+    Robot.drivetrain_Subsys.setSetpointRelative(-90);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,11 +42,13 @@ public class TurnToAngleCommand extends Command {
   @Override
   protected void end() {
     Robot.drivetrain_Subsys.disable();
+    Robot.drivetrain_Subsys.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.drivetrain_Subsys.disable();
   }
 }

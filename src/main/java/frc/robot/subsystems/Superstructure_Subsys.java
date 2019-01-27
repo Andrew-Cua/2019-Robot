@@ -1,43 +1,29 @@
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
-enum IntakeState
-{
-    ARMS_OPEN(),
-    ARMS_CLOSED(),
-    INTAKE_RAISED,
-    INTAKE_LOWERD;
-}
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.utilities.E3DistanceSensor;
 
 
 public class Superstructure_Subsys extends Subsystem
 {
     private static Superstructure_Subsys instance = new Superstructure_Subsys();
-
-    private IntakeState mArmState;
-    private IntakeState mIntakeState;
+    private E3DistanceSensor distanceSensor;
+    private double distance;
     private Superstructure_Subsys()
     {
+        this.distanceSensor = new E3DistanceSensor(Port.kOnboard,0x54);
 
     }
 
-    public void setArmState(IntakeState state)
+    public void updateDistance()
     {
-        mArmState = state;
+        this.distance = distanceSensor.getDistance();
     }
 
-    public void setIntakeState(IntakeState state)
+    public void updateSmartDashboard()
     {
-        mIntakeState = state;
-    }
-
-    public IntakeState getArmState()
-    {
-        return mArmState;
-    }
-    public IntakeState getIntakeState()
-    {
-        return mIntakeState;
+        distanceSensor.updateSmartDashboard();
     }
 
     public static Superstructure_Subsys getInstance()

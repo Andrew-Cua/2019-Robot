@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -31,7 +32,7 @@ public class Drivetrain_Subsys extends PIDSubsystem
                  kD = 0;
   private Drivetrain_Subsys()
   {
-    super("Drivetrain", 0.005, 0, 0);
+    super("Drivetrain", 0.03,0,0);
 
     getPIDController().setInputRange(-180, 180);  
     getPIDController().setOutputRange(-1,1);
@@ -94,7 +95,7 @@ public class Drivetrain_Subsys extends PIDSubsystem
   public void usePIDOutput(double output)
   {
     frontLeft.pidWrite(output);
-    frontRight.pidWrite(output);
+    frontRight.pidWrite(-output);
   }
 
   public void logSpeed()
@@ -169,6 +170,20 @@ public class Drivetrain_Subsys extends PIDSubsystem
     }
 
     
+  }
+  public void updateSmartDashboard()
+  {
+    SmartDashboard.putNumber("Gyro", Navx.getAngle());
+  }
+
+  public void resetNavx()
+  {
+    Navx.reset();
+  }
+
+  public void stop()
+  {
+    set(0,0);
   }
   //all methods above this point
   public static Drivetrain_Subsys getInstance()
