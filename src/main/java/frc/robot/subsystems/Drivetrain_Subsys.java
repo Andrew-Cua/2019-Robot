@@ -32,18 +32,18 @@ public class Drivetrain_Subsys extends PIDSubsystem
                  kD = 0;
   private Drivetrain_Subsys()
   {
-    super("Drivetrain", 0.03,0,0);
+    super("Drivetrain", 0.017,0.00,0.0997);
 
-    getPIDController().setInputRange(-180, 180);  
+    getPIDController().setInputRange(-360, 360);  
     getPIDController().setOutputRange(-1,1);
-    getPIDController().setAbsoluteTolerance(2);
+    getPIDController().setAbsoluteTolerance(10);
     getPIDController().setContinuous(true);
     
-    try {
+    //try {
       this.Navx = new AHRS(SPI.Port.kMXP);
-    } catch (Exception e) {
+    //} catch (Exception e) {
       //TODO: handle exception
-    }
+    //}
 
     frontLeft = new E3SparkMax(RobotMap.frontLeft);
     backLeft  = new E3SparkMax(RobotMap.backLeft);
@@ -89,13 +89,27 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
   public double returnPIDInput()
   {
-    return Navx.getAngle();
+    double Angle = Navx.getAngle();
+    if (Angle > 360){
+      Navx.reset();
+      Angle = Navx.getAngle();
+    } else if (Angle < -360){
+      Navx.reset();
+      Angle = Navx.getAngle();
+    } return Angle;
   }
+
 
   public void usePIDOutput(double output)
   {
-    frontLeft.pidWrite(output);
-    frontRight.pidWrite(-output);
+    if(getPIDController().getSetpoint() < 0){
+      frontLeft.pidWrite(output);
+      frontRight.pidWrite(-output);
+    } else if (getPIDController().getSetpoint() > 0){
+      frontLeft.pidWrite(-output);
+      frontRight.pidWrite(output);
+    }
+    
   }
 
   public void logSpeed()
@@ -148,9 +162,9 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
   }
 
-  public void seekBall()
+  public void seekTarget()
   {
-    Robot.limeLight.setTrackTarget(PipelineMode.BallMode);
+    //Robot.limeLight.setTrackTarget(PipelineMode.BallMode);
     double kP = 0.0052;
     double x = Robot.limeLight.getX();
     double y = Robot.limeLight.getY();
@@ -189,6 +203,9 @@ public class Drivetrain_Subsys extends PIDSubsystem
   public static Drivetrain_Subsys getInstance()
   {
     return instance;
+
+    //Hello this is my secret code. ;s,d,d,d,d,d,d,; xdxdxd sans undertale dab on the haters good b8 m8 i r8 8/8 xdxdxd
+
   }
   @Override
   public void initDefaultCommand() {

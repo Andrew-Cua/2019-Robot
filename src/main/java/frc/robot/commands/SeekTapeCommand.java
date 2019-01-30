@@ -10,8 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.utilities.Vision.PipelineMode;
-public class SeekBallCommand extends Command {
-  public SeekBallCommand() {
+
+public class SeekTapeCommand extends Command {
+  public SeekTapeCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.drivetrain_Subsys);
@@ -20,7 +21,7 @@ public class SeekBallCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.limeLight.setTrackTarget(PipelineMode.BallMode);
+    Robot.limeLight.setTrackTarget(PipelineMode.GoalMode);
   }
 
   // Called repeatedly when this Command is scheduled to run

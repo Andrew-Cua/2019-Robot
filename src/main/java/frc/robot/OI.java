@@ -23,18 +23,21 @@ public class OI {
   private JoystickButton drivePipelineButton;
   private JoystickButton turnToAngleButton;
   private JoystickButton resetNavxButton;
+  private JoystickButton seekTapeButton;
   public OI()
   {
-    resetNavxButton    = new JoystickButton(driveStick, 5);
+    seekTapeButton     = new JoystickButton(driveStick, 8);
+    resetNavxButton    = new JoystickButton(driveStick, 9);
     ballFollowerButton = new JoystickButton(driveStick, 7);
     ballSeekerButton   = new JoystickButton(driveStick, 12);
     drivePipelineButton = new JoystickButton(driveStick, 2);
-    turnToAngleButton   = new JoystickButton(driveStick, 3);
+    turnToAngleButton   = new JoystickButton(driveStick, 10);
     resetNavxButton.whenPressed(new ResetNavxCommand());
     drivePipelineButton.whenPressed(new ChangeToDrivePipelineCommand());
     ballFollowerButton.whileHeld(new BallFollower());
     ballSeekerButton.whileHeld(new SeekBallCommand());
-    turnToAngleButton.whenPressed(new TurnToAngleCommand(0));
+    turnToAngleButton.whenPressed(new TurnToAngleCommand(100));
+    seekTapeButton.whileHeld(new SeekTapeCommand());
   }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
