@@ -1,25 +1,26 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
+import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class Intake_Subsys extends Subsystem
 {
 
     private static Intake_Subsys instance = new Intake_Subsys();
 
-    private Solenoid extendArms;
-    private Solenoid retractArms;
+    private DoubleSolenoid shootPiston;
 
     private VictorSPX leftIntakeMotor;
     private VictorSPX rightIntakeMotor;
+    private Value solenoidState = Value.kOff;
     private Intake_Subsys()
     {
-        this.extendArms  = new Solenoid(0);
-        this.retractArms = new Solenoid(1);
+        this.shootPiston = new DoubleSolenoid(RobotMap.extendChannel, RobotMap.retractChannel);
 
         this.leftIntakeMotor  = new VictorSPX(0);
         this.rightIntakeMotor = new VictorSPX(1);
@@ -28,17 +29,23 @@ public class Intake_Subsys extends Subsystem
     }
 
 
-    public void openArms()
+    public void extendPiston()
     {
-        extendArms.set(true);
-        retractArms.set(false);
+        shootPiston.set(Value.kForward);
+        solenoidState = Value.kForward;
     }
 
-    public void closeArms()
+    public void retractPiston()
     {
-        extendArms.set(false);
-        retractArms.set(true);
+        shootPiston.set(Value.kReverse);
+        solenoidState = Value.kReverse;
     }
+
+    public boolean hasShotPiston()
+    {
+        return solenoidState == Value.kForward;
+    }
+
 
     public void runIntakeMotors()
     {

@@ -24,8 +24,19 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
 
+  //motors
   public static int frontLeft = 10,
                     backLeft  = 11,
                     frontRight= 12,
                     backRight = 13;
+
+  //shifting solenoids
+  public static int leftSolenoidOne  = 0,
+                    leftSolenoidTwo  = 1,
+                    rightSolenoidOne = 2,
+                    rightSolenoidTwo = 3;
+
+  //intake solenoid
+  public static int extendChannel = 4,
+                    retractChannel = 5;
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain_Subsys;
+import frc.robot.subsystems.EvoShifters_Subsystem;
 import frc.robot.subsystems.Arm_Subsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake_Subsys;
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
   public static Intake_Subsys intake_Subsys;
   public static Superstructure_Subsys superstructure_Subsys;
   public static Vision limeLight;
+  public static EvoShifters_Subsystem shifters_Subsystem;
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
 
@@ -51,7 +53,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    
+    shifters_Subsystem = EvoShifters_Subsystem.getInstance();
     drivetrain_Subsys = Drivetrain_Subsys.getInstance();
     arm_Subsys = Arm_Subsys.getInstance();
     intake_Subsys = Intake_Subsys.getInstance();
