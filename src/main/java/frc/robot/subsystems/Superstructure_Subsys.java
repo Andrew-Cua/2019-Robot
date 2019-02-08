@@ -12,7 +12,7 @@ public class Superstructure_Subsys extends Subsystem
     private double distance;
     private Superstructure_Subsys()
     {
-        this.distanceSensor = new E3DistanceSensor(Port.kOnboard,0x54);
+        this.distanceSensor = new E3DistanceSensor(Port.kOnboard,4);
 
     }
 

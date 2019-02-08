@@ -4,10 +4,14 @@ import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import frc.robot.utilities.*;
+import frc.robot.subsystems.Arm_Subsys.ArmSetpoints;
 public class Intake_Subsys extends Subsystem
 {
 
@@ -15,16 +19,19 @@ public class Intake_Subsys extends Subsystem
 
     private DoubleSolenoid shootPiston;
 
-    private VictorSPX leftIntakeMotor;
-    private VictorSPX rightIntakeMotor;
+    private TalonSRX leftIntakeMotor;
+    private TalonSRX rightIntakeMotor;
+    private E3Talon intakeEffector;
     private Value solenoidState = Value.kOff;
     private Intake_Subsys()
     {
         this.shootPiston = new DoubleSolenoid(RobotMap.extendChannel, RobotMap.retractChannel);
 
-        this.leftIntakeMotor  = new VictorSPX(0);
-        this.rightIntakeMotor = new VictorSPX(1);
+        this.leftIntakeMotor  = new TalonSRX(0);
+        this.rightIntakeMotor = new TalonSRX(1);
+        this.intakeEffector   = new E3Talon(3, FeedbackDevice.CTRE_MagEncoder_Relative, false);
 
+        this.intakeEffector.configurePIDF(0, 0, 0, 0.02);
         rightIntakeMotor.setInverted(true);
     }
 

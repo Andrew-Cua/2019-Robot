@@ -9,31 +9,52 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.utilities.Conversions;
 import frc.robot.utilities.E3Talon;
-
+import frc.robot.utilities.StateControl.IArmState;
+import frc.robot.utilities.StateControl.ArmStates.HighGoalState;
+import frc.robot.utilities.StateControl.ArmStates.LowGoalState;
+import frc.robot.utilities.StateControl.ArmStates.MidGoalState;
+import frc.robot.utilities.StateControl.ArmStates.NeutralState;
+import frc.robot.utilities.StateControl.ArmStates.TeleopControlState;
+import frc.robot.Robot;
 public class Arm_Subsys extends Subsystem
 {
     public enum ArmSetpoints
     {
+        
+
         kNeutral(100),
         kLowGoal(200),
         kMidGoal(300),
         kHighGoal(400);
-        private double setpoint;
-        private ArmSetpoints(double tickPos)
+
+
+        private int setpoint;
+        private ArmSetpoints(int tickPos)
         {
             this.setpoint = tickPos;
         }
-        public double getSetpoint()
+        public int getSetpoint()
         {
             return setpoint;
         }
     }
     private E3Talon masterArm, slaveArm;
-    private ArmSetpoints currentSetpoint = ArmSetpoints.kNeutral;
-    private ArmSetpoints seekSetpoint;
+    //states the arm can be in
+    private IArmState NeutralState;
+    private IArmState TeleopControlState;
+    private IArmState LowGoalState;
+    private IArmState MidGoalState;
+    private IArmState HighGoalState;
+    private IArmState state;
     private static Arm_Subsys instance = new Arm_Subsys();
     private Arm_Subsys()
     {
+        NeutralState = new NeutralState(this);
+        TeleopControlState = new TeleopControlState(this);
+        LowGoalState = new LowGoalState(this);
+        MidGoalState = new MidGoalState(this);
+        HighGoalState = new HighGoalState(this);
+        state = NeutralState;
         masterArm = new E3Talon(10, FeedbackDevice.CTRE_MagEncoder_Relative, true);
         slaveArm  = new E3Talon(10, FeedbackDevice.CTRE_MagEncoder_Relative, false);
         slaveArm.follow(masterArm);
@@ -42,32 +63,38 @@ public class Arm_Subsys extends Subsystem
         masterArm.configureMotionMagic();
         masterArm.configurePIDF(Conversions.motionkP, Conversions.motionkI, Conversions.motionkD, Conversions.motionkF);
     }
+
+    public void controlLoop()
+    {
+        state.moveArmToPos();
+        state.updateSmartDashboard();
+    }
+
+    public void setMagicSetpoint(int ticks)
+    {
+        masterArm.setMagicSetpoint(ticks);
+    }
     
-
-    public void rotateArm(double power)
+    public void updateState(IArmState nextState)
     {
-        double maxTick = 1000;
-        double setpoint = power * maxTick;
-        masterArm.setMagicSetpoint(setpoint); 
+        this.state = nextState;
     }
 
-    public void goToSetpoint(ArmSetpoints setpoint)
+    public void moveToPos()
     {
-        masterArm.setMagicSetpoint(setpoint.getSetpoint());
-        seekSetpoint = setpoint;
+        state.moveArmToPos();
     }
 
-    public boolean onTarget()
+    public void updateSmartDashboard()
     {
-        double distance = seekSetpoint.getSetpoint() - masterArm.getSelectedSensorPosition();
-        if(distance < 50)
-        {
-            currentSetpoint = seekSetpoint;
-            return true;
-        }
-        return false;
+        state.updateSmartDashboard();
     }
 
+    public void zeroSensors()
+    {
+        masterArm.setSelectedSensorPosition(0);
+        slaveArm.setSelectedSensorPosition(0);
+    }
 
     public static Arm_Subsys getInstance()
     {

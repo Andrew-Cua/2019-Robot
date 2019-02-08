@@ -17,7 +17,8 @@ import frc.robot.commands.*;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-
+  private Joystick driveStick = new Joystick(0);
+  private Joystick controlStick = new Joystick(1);
   private JoystickButton ballFollowerButton;
   private JoystickButton ballSeekerButton;
   private JoystickButton drivePipelineButton;
@@ -67,10 +68,11 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
 
   //private XboxController driveController = new XboxController(0);
-  private Joystick driveStick = new Joystick(0);
+  
 
   public Joystick getDriveController()
   {return driveStick;}
-
+  public Joystick getControlStick()
+  {return controlStick;}
   
 }

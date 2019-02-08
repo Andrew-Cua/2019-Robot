@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class E3DistanceSensor
 {
     private I2C distanceSensor;
-    private final int MAX_BYTES = 32;
+    private final int MAX_BYTES = 4;
     private byte[] data;
     private int address;
     private double currentDistance;
@@ -18,21 +18,28 @@ public class E3DistanceSensor
         this.address = address;
     }
 
-    private byte readData()
+    private String readData()
     {
-        byte[] data = new byte[MAX_BYTES];
-        distanceSensor.read(address, MAX_BYTES, data);
-        return data[MAX_BYTES -1];
+        byte[] data = new byte[10];
+        distanceSensor.read(address, 10, data);
+        return new String(data);
     }
     public double getDistance()
     {
-        this.currentDistance = (double)readData();
+        try {
+            this.currentDistance = (double)Double.parseDouble(readData());    
+        } catch (Exception e) {
+            //TODO: handle exception
+            this.currentDistance = -30;
+
+        }
+        
         return this.currentDistance;
     }
 
     public void updateSmartDashboard()
     {
-        SmartDashboard.putNumber("Distance: ", (double)readData());
+        SmartDashboard.putNumber("Distance: ", getDistance());
         SmartDashboard.putBoolean("Is Connected", isConnected());
     }
 
