@@ -11,21 +11,26 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.utilities.*;
+import frc.robot.utilities.StateControl.IIntakeState;
+import frc.robot.utilities.StateControl.IntakeStates.TeleopControlIntakeState;
 import frc.robot.subsystems.Arm_Subsys.ArmSetpoints;
 public class Intake_Subsys extends Subsystem
 {
 
     private static Intake_Subsys instance = new Intake_Subsys();
 
-    private DoubleSolenoid shootPiston;
+    private Solenoid shootPiston;
 
     private TalonSRX leftIntakeMotor;
     private TalonSRX rightIntakeMotor;
     private E3Talon intakeEffector;
     private Value solenoidState = Value.kOff;
+
+    private IIntakeState teleopControl;
+    private IIntakeState state;
     private Intake_Subsys()
     {
-        this.shootPiston = new DoubleSolenoid(RobotMap.extendChannel, RobotMap.retractChannel);
+        this.shootPiston = new Solenoid(RobotMap.extendChannel);
 
         this.leftIntakeMotor  = new TalonSRX(0);
         this.rightIntakeMotor = new TalonSRX(1);
@@ -33,24 +38,36 @@ public class Intake_Subsys extends Subsystem
 
         this.intakeEffector.configurePIDF(0, 0, 0, 0.02);
         rightIntakeMotor.setInverted(true);
+
+        this.teleopControl = new TeleopControlIntakeState(this);
+        this.state = teleopControl;
+    }
+
+    public void controlLoop()
+    {
+        state.setIntakeToAngle();
+        state.updateSmartDashboard();
     }
 
 
     public void extendPiston()
     {
-        shootPiston.set(Value.kForward);
-        solenoidState = Value.kForward;
+        shootPiston.set(true);
     }
 
     public void retractPiston()
     {
-        shootPiston.set(Value.kReverse);
-        solenoidState = Value.kReverse;
+        shootPiston.set(false);
     }
 
     public boolean hasShotPiston()
     {
         return solenoidState == Value.kForward;
+    }
+
+    public void actuateIntake(double pow)
+    {
+        intakeEffector.set(ControlMode.PercentOutput, pow);
     }
 
 

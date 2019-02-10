@@ -28,7 +28,9 @@ public class RobotMap {
   public static int frontLeft = 10,
                     backLeft  = 11,
                     frontRight= 12,
-                    backRight = 13;
+                    backRight = 13,
+                    leftSlave = 14,
+                    rightSlave = 15;
 
   //shifting solenoids
   public static int leftSolenoidOne  = 0,

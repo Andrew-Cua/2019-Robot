@@ -24,7 +24,9 @@ public class Drivetrain_Subsys extends PIDSubsystem
   private E3SparkMax frontLeft,
                       backLeft,
                       frontRight,
-                      backRight;
+                      backRight,
+                      leftSlave,
+                      rightSlave;
   private AHRS Navx;
 
   private double kP = 0,
@@ -47,11 +49,14 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
     frontLeft = new E3SparkMax(RobotMap.frontLeft);
     backLeft  = new E3SparkMax(RobotMap.backLeft);
+    leftSlave = new E3SparkMax(RobotMap.leftSlave);
     frontRight= new E3SparkMax(RobotMap.frontRight);
     backRight = new E3SparkMax(RobotMap.backRight);
+    rightSlave= new E3SparkMax(RobotMap.rightSlave);
 
     frontRight.setInverted(true);
     backRight.setInverted(true);
+    rightSlave.setInverted(true);
 
     frontLeft.setPIDConsts(0, 0.05, 0, 0);
     frontRight.setPIDConsts(0, 0.05, 0, 0);
@@ -61,8 +66,10 @@ public class Drivetrain_Subsys extends PIDSubsystem
 
     //backLeft.follow(frontLeft);
     //backRight.follow(frontRight);
-    backRight.follow(frontLeft);
+    backLeft.follow(frontLeft);
+    leftSlave.follow(frontLeft);
     backRight.follow(frontRight);
+    rightSlave.follow(frontRight);
 
   }
 

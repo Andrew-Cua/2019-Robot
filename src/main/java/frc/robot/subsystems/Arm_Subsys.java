@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -66,6 +67,14 @@ public class Arm_Subsys extends Subsystem
 
     public void controlLoop()
     {
+        if(Robot.m_oi.getControlStick().getThrottle() > 0 + 0.1)
+        {
+            if(state != TeleopControlState)
+            {
+                SmartDashboard.putString("Errors", "Cannot change state, put the throttle down");
+            }
+            state = TeleopControlState;
+        }
         state.moveArmToPos();
         state.updateSmartDashboard();
     }
