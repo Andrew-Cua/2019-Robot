@@ -33,7 +33,7 @@ public class RobotMap {
                     rightSlave = 15;
 
   //shifting solenoids
-  public static int leftSolenoidOne  = 0,
+  public static int leftSolenoidOne  = 6,
                     leftSolenoidTwo  = 1,
                     rightSolenoidOne = 2,
                     rightSolenoidTwo = 3;
@@ -41,4 +41,7 @@ public class RobotMap {
   //intake solenoid
   public static int extendChannel = 4,
                     retractChannel = 5;
+
+  public static int armMaster = 10,
+                    armSlave = 11;
 }

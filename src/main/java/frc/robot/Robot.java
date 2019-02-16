@@ -17,8 +17,10 @@ import frc.robot.subsystems.Drivetrain_Subsys;
 import frc.robot.subsystems.EvoShifters_Subsystem;
 import frc.robot.subsystems.Arm_Subsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.HatchIntake;
 import frc.robot.subsystems.Intake_Subsys;
 import frc.robot.subsystems.Superstructure_Subsys;
+import frc.robot.subsystems.Wrist_Subsys;
 import frc.robot.utilities.*;
 import frc.robot.utilities.Vision.PipelineMode;
 import edu.wpi.first.networktables.NetworkTable;
@@ -41,6 +43,8 @@ public class Robot extends TimedRobot {
   public static Superstructure_Subsys superstructure_Subsys;
   public static Vision limeLight;
   public static EvoShifters_Subsystem shifters_Subsystem;
+  public static Wrist_Subsys wrist_Subsys;
+  public static HatchIntake hatchIntake;
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
 
@@ -58,6 +62,8 @@ public class Robot extends TimedRobot {
     arm_Subsys = Arm_Subsys.getInstance();
     intake_Subsys = Intake_Subsys.getInstance();
     superstructure_Subsys = Superstructure_Subsys.getInstance();
+    wrist_Subsys = Wrist_Subsys.getInstance();
+    hatchIntake = HatchIntake.getInstance();
     limeLight = new Vision();
     m_oi = new OI();
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
@@ -130,7 +136,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     //Scheduler.getInstance().run();
-    drivetrain_Subsys.positionControl(Conversions.WHEEL_CIRCUMFERENCE);
+    //drivetrain_Subsys.positionControl(Conversions.WHEEL_CIRCUMFERENCE);
   }
 
   @Override
@@ -144,6 +150,7 @@ public class Robot extends TimedRobot {
     }
     limeLight.setTrackTarget(PipelineMode.NormalMode);
     }
+    
 
   /**
    * This function is called periodically during operator control.
@@ -153,6 +160,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     limeLight.updateVision();
     //drivetrain_Subsys.force();
+    //intake_Subsys.runIntakeMotors();
   }
 
   /**

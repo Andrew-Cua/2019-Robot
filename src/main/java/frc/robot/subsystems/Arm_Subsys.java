@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -17,6 +18,8 @@ import frc.robot.utilities.StateControl.ArmStates.MidGoalState;
 import frc.robot.utilities.StateControl.ArmStates.NeutralState;
 import frc.robot.utilities.StateControl.ArmStates.TeleopControlState;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
+import frc.robot.commands.DefaultArmCommand;
 public class Arm_Subsys extends Subsystem
 {
     public enum ArmSetpoints
@@ -39,7 +42,7 @@ public class Arm_Subsys extends Subsystem
             return setpoint;
         }
     }
-    private E3Talon masterArm, slaveArm;
+    private TalonSRX masterArm, slaveArm;
     //states the arm can be in
     private IArmState NeutralState;
     private IArmState TeleopControlState;
@@ -56,18 +59,20 @@ public class Arm_Subsys extends Subsystem
         MidGoalState = new MidGoalState(this);
         HighGoalState = new HighGoalState(this);
         state = NeutralState;
-        masterArm = new E3Talon(10, FeedbackDevice.CTRE_MagEncoder_Relative, true);
-        slaveArm  = new E3Talon(10, FeedbackDevice.CTRE_MagEncoder_Relative, false);
+        //masterArm.setInverted(InvertType.InvertMotorOutput);
+        masterArm = new TalonSRX(RobotMap.armMaster);
+        slaveArm  = new TalonSRX(RobotMap.armSlave);
+        //masterArm.setInverted(InvertType.InvertMotorOutput);
         slaveArm.follow(masterArm);
         slaveArm.setInverted(InvertType.OpposeMaster);
 
-        masterArm.configureMotionMagic();
-        masterArm.configurePIDF(Conversions.motionkP, Conversions.motionkI, Conversions.motionkD, Conversions.motionkF);
+        //masterArm.configureMotionMagic();
+        //masterArm.configurePIDF(Conversions.motionkP, Conversions.motionkI, Conversions.motionkD, Conversions.motionkF);
     }
 
     public void controlLoop()
     {
-        if(Robot.m_oi.getControlStick().getThrottle() > 0 + 0.1)
+        if(Robot.m_oi.getWhatevs().getY(Hand.kLeft) > 0 + 0.1)
         {
             if(state != TeleopControlState)
             {
@@ -75,13 +80,31 @@ public class Arm_Subsys extends Subsystem
             }
             state = TeleopControlState;
         }
-        state.moveArmToPos();
-        state.updateSmartDashboard();
+        moveToPos();
+        updateSmartDashboard();
+    }
+
+    public void setState(ArmSetpoints setpoint)
+    {
+        switch(setpoint)
+        {
+            case kHighGoal:
+                state = HighGoalState;
+                break;
+            case kMidGoal:
+                state = MidGoalState;
+                break;
+            case kLowGoal:
+                state = LowGoalState;
+                break;
+            case kNeutral:
+                state = NeutralState;
+        }
     }
 
     public void setMagicSetpoint(int ticks)
     {
-        masterArm.setMagicSetpoint(ticks);
+        //masterArm.setMagicSetpoint(ticks);
     }
     
     public void updateState(IArmState nextState)
@@ -109,8 +132,13 @@ public class Arm_Subsys extends Subsystem
     {
         return instance; 
     }
+
+    public void set(double pow)
+    {
+        masterArm.set(ControlMode.PercentOutput, pow*0.85D);
+    }
     public void initDefaultCommand()
     {
-
+        setDefaultCommand(new DefaultArmCommand());
     }
 }

@@ -18,26 +18,37 @@ import frc.robot.commands.*;
  */
 public class OI {
   private Joystick driveStick = new Joystick(0);
-  private Joystick controlStick = new Joystick(1);
+  //private Joystick controlStick = new Joystick(1);
+  private XboxController whateves = new XboxController(1);
   private JoystickButton ballFollowerButton;
   private JoystickButton ballSeekerButton;
   private JoystickButton drivePipelineButton;
   private JoystickButton turnToAngleButton;
   private JoystickButton resetNavxButton;
   private JoystickButton seekTapeButton;
+  private JoystickButton shootBallButton;
+  private JoystickButton reverseBallButton;
+  private JoystickButton toggleHatchIntake;
+  //private JoystickButton actuateElevator;
   public OI()
   {
+    toggleHatchIntake  = new JoystickButton(whateves, 4);
+    reverseBallButton  = new JoystickButton(whateves, 5);
+    shootBallButton    = new JoystickButton(whateves, 6);
     seekTapeButton     = new JoystickButton(driveStick, 8);
-    resetNavxButton    = new JoystickButton(driveStick, 9);
-    ballFollowerButton = new JoystickButton(driveStick, 7);
+    //resetNavxButton    = new JoystickButton(driveStick, 9);
+    //ballFollowerButton = new JoystickButton(driveStick, 7);
     ballSeekerButton   = new JoystickButton(driveStick, 12);
     drivePipelineButton = new JoystickButton(driveStick, 2);
-    turnToAngleButton   = new JoystickButton(driveStick, 10);
-    resetNavxButton.whenPressed(new ResetNavxCommand());
-    drivePipelineButton.whenPressed(new ChangeToDrivePipelineCommand());
-    ballFollowerButton.whileHeld(new BallFollower());
+    //turnToAngleButton   = new JoystickButton(driveStick, 10);
+    toggleHatchIntake.whenPressed(new toggleHatchIntakeCommand());
+    shootBallButton.whileHeld(new RunIntakeCommand());
+    reverseBallButton.whileHeld(new ReverseIntakeMotorsCommand());
+    //resetNavxButton.whenPressed(new ResetNavxCommand());
+    //drivePipelineButton.whenPressed(new ChangeToDrivePipelineCommand());
+    //ballFollowerButton.whileHeld(new BallFollower());
     ballSeekerButton.whileHeld(new SeekBallCommand());
-    turnToAngleButton.whenPressed(new TurnToAngleCommand(100));
+    //turnToAngleButton.whenPressed(new TurnToAngleCommand(100));
     seekTapeButton.whileHeld(new SeekTapeCommand());
   }
   //// CREATING BUTTONS
@@ -72,7 +83,10 @@ public class OI {
 
   public Joystick getDriveController()
   {return driveStick;}
-  public Joystick getControlStick()
-  {return controlStick;}
+  /*public Joystick getControlStick()
+  {return controlStick;}*/
+
+  public XboxController getWhatevs()
+  {return whateves;}
   
 }

@@ -16,7 +16,7 @@ public class TeleopControlIntakeState implements IIntakeState
     @Override
     public void setIntakeToAngle()
     {
-        intake.actuateIntake(Robot.m_oi.getControlStick().getY());
+        //intake.actuateIntake(Robot.m_oi.getWhatevs().getY());
     }
 
     @Override

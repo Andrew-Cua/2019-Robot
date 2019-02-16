@@ -89,9 +89,9 @@ public class Drivetrain_Subsys extends PIDSubsystem
   public void set(double left, double right)
   {
     frontLeft.set(left);
-    backLeft.set(left);
+    //backLeft.set(left);
     frontRight.set(right);
-    backRight.set(right);
+    //backRight.set(right);
   }
 
   public double returnPIDInput()
