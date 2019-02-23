@@ -9,28 +9,28 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.utilities.Vision.PipelineMode;
-
+import frc.robot.subsystems.Wrist_Subsys;
+import frc.robot.subsystems.Wrist_Subsys.WristSepoint;
 /**
  * Add your docs here.
  */
-public class ChangeToDrivePipelineCommand extends InstantCommand {
+public class ChangeWristStateCommand extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ChangeToDrivePipelineCommand() {
-    super();
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis)
-
-    // Congrats you found more of my secret code. xdxdxd sans undertale
+  private WristSepoint setpoint;
+  public ChangeWristStateCommand(WristSepoint setpoint) {
     
+    super();
+    this.setpoint = setpoint;
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.limeLight.setTrackTarget(PipelineMode.NormalMode);
+    Robot.wrist_Subsys.setState(setpoint);
   }
 
 }

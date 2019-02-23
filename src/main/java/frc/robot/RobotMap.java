@@ -44,4 +44,10 @@ public class RobotMap {
 
   public static int armMaster = 10,
                     armSlave = 11;
+
+  //Climber Channels
+  public static final int frontClimberOut = 15,
+                          frontClimberIn = 16,
+                          backClimberOut = 17,
+                          backClimberIn  = 18;
 }

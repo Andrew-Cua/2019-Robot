@@ -13,11 +13,15 @@ public class HighGoalState implements IArmState
     }
 
     @Override
-    public void moveArmToPos()
+    public void moveArmToBallPos()
     {
         arm.setMagicSetpoint(ArmSetpoints.kHighGoal.getSetpoint());
     }
-
+    
+    @Override
+    public void moveArmToHatchPos() {
+        arm.setMagicSetpoint(ArmSetpoints.kHighGoal.getHatchSetpoint());
+    }
     @Override 
     public void updateSmartDashboard()
     {

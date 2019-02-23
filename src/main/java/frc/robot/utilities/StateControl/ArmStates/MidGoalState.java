@@ -14,9 +14,13 @@ public class MidGoalState implements IArmState
     }
 
     @Override
-    public void moveArmToPos()
+    public void moveArmToBallPos()
     {
         arm.setMagicSetpoint(ArmSetpoints.kMidGoal.getSetpoint());
+    }
+    @Override
+    public void moveArmToHatchPos() {
+        arm.setMagicSetpoint(ArmSetpoints.kMidGoal.getHatchSetpoint());
     }
 
     @Override

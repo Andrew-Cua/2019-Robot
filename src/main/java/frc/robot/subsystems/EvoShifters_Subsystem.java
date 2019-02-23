@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
 /**
  * Add your docs here.
@@ -22,7 +23,7 @@ public class EvoShifters_Subsystem extends Subsystem {
     kHighGear;
   }
 
-  private driveGear currentDriveGear = driveGear.kLowGear;
+  private driveGear currentDriveGear = driveGear.kHighGear;
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private DoubleSolenoid leftShifter;
@@ -31,8 +32,8 @@ public class EvoShifters_Subsystem extends Subsystem {
   private static EvoShifters_Subsystem shifters = new EvoShifters_Subsystem();
   private EvoShifters_Subsystem()
   {
-    this.leftShifter = new DoubleSolenoid(RobotMap.leftSolenoidOne, RobotMap.leftSolenoidTwo);
-    this.rightShifter = new DoubleSolenoid(RobotMap.rightSolenoidOne, RobotMap.rightSolenoidTwo);
+    this.leftShifter = new DoubleSolenoid(3, 4);
+    //this.rightShifter = new DoubleSolenoid(RobotMap.rightSolenoidOne, RobotMap.rightSolenoidTwo);
   }
 
 
@@ -40,12 +41,12 @@ public class EvoShifters_Subsystem extends Subsystem {
   public void highGear()
   {
     leftShifter.set(Value.kForward);
-    rightShifter.set(Value.kForward);
+    //rightShifter.set(Value.kForward);
   }
   public void lowGear()
   {
     leftShifter.set(Value.kReverse);
-    rightShifter.set(Value.kReverse);
+    //rightShifter.set(Value.kReverse);
   }
 
   public void toggleGear()
@@ -61,6 +62,19 @@ public class EvoShifters_Subsystem extends Subsystem {
     }
   }
 
+  public void update()
+  {
+    switch(currentDriveGear)
+    {
+      case kHighGear:
+        SmartDashboard.putBoolean("Normal Drive", true);
+        break;
+      case kLowGear:
+        SmartDashboard.putBoolean("Normal Drive", false);
+        break;
+
+    }
+  }
 
   public static EvoShifters_Subsystem getInstance()
   {

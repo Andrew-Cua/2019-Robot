@@ -12,9 +12,14 @@ public class LowGoalState implements IArmState
     }
 
     @Override
-    public void moveArmToPos()
+    public void moveArmToBallPos()
     {
         arm.setMagicSetpoint(ArmSetpoints.kLowGoal.getSetpoint());
+    }
+
+    @Override
+    public void moveArmToHatchPos() {
+        arm.setMagicSetpoint(ArmSetpoints.kLowGoal.getHatchSetpoint());
     }
 
     @Override

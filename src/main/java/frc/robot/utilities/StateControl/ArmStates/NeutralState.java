@@ -13,9 +13,14 @@ public class NeutralState implements IArmState
     }
 
     @Override
-    public void moveArmToPos()
+    public void moveArmToBallPos()
     {
         arm.setMagicSetpoint(ArmSetpoints.kNeutral.getSetpoint());
+    }
+
+    @Override
+    public void moveArmToHatchPos() {
+        arm.setMagicSetpoint(ArmSetpoints.kNeutral.getHatchSetpoint());
     }
 
     @Override

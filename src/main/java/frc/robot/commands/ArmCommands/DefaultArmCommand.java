@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.ArmStateCommands;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
@@ -26,8 +26,9 @@ public class DefaultArmCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.arm_Subsys.set(Robot.m_oi.getWhatevs().getY(Hand.kLeft));
+    Robot.arm_Subsys.controlLoop();
     //System.out.println(Robot.m_oi.getWhatevs().getY(Hand.kLeft));
+    //haha Britannia rule the waves, DIS-GUS-STAIN
   }
 
   // Make this return true when this Command no longer needs to run execute()

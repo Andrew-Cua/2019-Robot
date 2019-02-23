@@ -5,14 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.Wrist;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
-public class getVisionValues_Command extends Command {
-  public getVisionValues_Command() {
+public class ActuateIntakeCommand extends Command {
+  public ActuateIntakeCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(Robot.wrist_Subsys);
   }
 
   // Called just before this Command runs the first time
@@ -23,6 +26,7 @@ public class getVisionValues_Command extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.wrist_Subsys.setPos(((Robot.m_oi.getIntakeController().getRawAxis(3)+1)/2)*6800);
   }
 
   // Make this return true when this Command no longer needs to run execute()

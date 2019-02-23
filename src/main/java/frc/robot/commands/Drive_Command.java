@@ -26,8 +26,8 @@ public class Drive_Command extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drivetrain_Subsys.drive(Robot.m_oi.getDriveController().getY(),
-                                  Robot.m_oi.getDriveController().getTwist()
+    Robot.drivetrain_Subsys.drive(Robot.m_oi.getDriveController().getY(Hand.kLeft),
+                                  Robot.m_oi.getDriveController().getX(Hand.kRight)
                                   );
   }
 

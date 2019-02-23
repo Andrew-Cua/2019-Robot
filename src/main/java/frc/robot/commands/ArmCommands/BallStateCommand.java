@@ -5,28 +5,33 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.ArmStateCommands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Arm_Subsys.ArmSetpoints;
 
 /**
  * Add your docs here.
  */
-public class ResetNavxCommand extends InstantCommand {
+public class BallStateCommand extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ResetNavxCommand() {
+  private ArmSetpoints setpoint;
+  public BallStateCommand(ArmSetpoints setpoint) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    //requires();
+    this.setpoint = setpoint;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.drivetrain_Subsys.resetNavx();
+    Robot.arm_Subsys.setState(setpoint);
+    Robot.arm_Subsys.setBall();
   }
 
 }

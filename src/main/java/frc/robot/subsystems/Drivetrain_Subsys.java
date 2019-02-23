@@ -64,8 +64,6 @@ public class Drivetrain_Subsys extends PIDSubsystem
     frontLeft.setOutputRange(-1,1);
     frontRight.setOutputRange(-1,1);
 
-    //backLeft.follow(frontLeft);
-    //backRight.follow(frontRight);
     backLeft.follow(frontLeft);
     leftSlave.follow(frontLeft);
     backRight.follow(frontRight);
@@ -89,11 +87,10 @@ public class Drivetrain_Subsys extends PIDSubsystem
   public void set(double left, double right)
   {
     frontLeft.set(left);
-    //backLeft.set(left);
     frontRight.set(right);
-    //backRight.set(right);
   }
 
+  @Override
   public double returnPIDInput()
   {
     double Angle = Navx.getAngle();
@@ -106,7 +103,7 @@ public class Drivetrain_Subsys extends PIDSubsystem
     } return Angle;
   }
 
-
+  @Override
   public void usePIDOutput(double output)
   {
     if(getPIDController().getSetpoint() < 0){
@@ -119,55 +116,12 @@ public class Drivetrain_Subsys extends PIDSubsystem
     
   }
 
-  public void logSpeed()
-  {
-    //System.out.println(frontLeft.get());
-    System.out.println(frontRight.getPosition());
-  } 
-
   public void positionControl(double rotations)
   {
     frontLeft.setReference(rotations);
     frontRight.setReference(rotations);
   }
 
-  public void force()
-  {
-    set(1,1);
-  }
-
-  public void BallFollower() 
-  {
-    Robot.limeLight.setTrackTarget(PipelineMode.BallMode);
-
-    double leftPower = 0, rightPower = 0;
-    if(Robot.limeLight.getV() != 1)//checks if a target is in view
-    {
-        System.out.println("nothing is being seen");
-        System.out.println("Current Value V: " + Robot.limeLight.getV());
-
-        return;//exits method if nothing is seen and gives current value of "v"
-    }
-    //allows for only one method call and increased readability by making left and right power exist
-    if (Robot.limeLight.getV() != 0 && Robot.limeLight.getX() > -7.5 && Robot.limeLight.getX() < 7.5)
-    {
-        leftPower  = -0.25;
-        rightPower = -0.25;
-        
-    } else if (Robot.limeLight.getV() == 1 && Robot.limeLight.getX() > 7.5)
-    {
-        leftPower  =  -0.075;
-        rightPower =  0.075;
-
-    } else if (Robot.limeLight.getV() == 1 && Robot.limeLight.getX() < -7.5) 
-    {
-        leftPower  = 0.075;
-        rightPower = -0.075;
-    } 
-
-    Robot.drivetrain_Subsys.set(leftPower, rightPower);
-
-  }
 
   public void seekTarget()
   {
@@ -206,12 +160,11 @@ public class Drivetrain_Subsys extends PIDSubsystem
   {
     set(0,0);
   }
+
   //all methods above this point
   public static Drivetrain_Subsys getInstance()
   {
     return instance;
-
-    //Hello this is my secret code. ;s,d,d,d,d,d,d,; xdxdxd sans undertale dab on the haters good b8 m8 i r8 8/8 xdxdxd
 
   }
   @Override

@@ -11,82 +11,70 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.*;
+import frc.robot.commands.ArmStateCommands.*;
+import frc.robot.subsystems.Arm_Subsys.ArmSetpoints;
 
-/**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
- */
 public class OI {
-  private Joystick driveStick = new Joystick(0);
-  //private Joystick controlStick = new Joystick(1);
-  private XboxController whateves = new XboxController(1);
-  private JoystickButton ballFollowerButton;
+  private Joystick intakeStick = new Joystick(0);
+  private XboxController driveController = new XboxController(1);
   private JoystickButton ballSeekerButton;
   private JoystickButton drivePipelineButton;
-  private JoystickButton turnToAngleButton;
-  private JoystickButton resetNavxButton;
   private JoystickButton seekTapeButton;
   private JoystickButton shootBallButton;
   private JoystickButton reverseBallButton;
   private JoystickButton toggleHatchIntake;
-  //private JoystickButton actuateElevator;
+  private JoystickButton setLowGoalHatchButton;
+  private JoystickButton setMidGoalHatchButton;
+  private JoystickButton setHighGoalHatchButton;
+  private JoystickButton setLowGoalBallButton;
+  private JoystickButton setMidGoalBallButton;
+  private JoystickButton setHighGoalBallButton;
+  private JoystickButton setNeutralArmButton;
+  private JoystickButton shiftGear;
+  private JoystickButton setNeutralTwo;
+  private JoystickButton setHatchTwo;
   public OI()
   {
-    toggleHatchIntake  = new JoystickButton(whateves, 4);
-    reverseBallButton  = new JoystickButton(whateves, 5);
-    shootBallButton    = new JoystickButton(whateves, 6);
-    seekTapeButton     = new JoystickButton(driveStick, 8);
-    //resetNavxButton    = new JoystickButton(driveStick, 9);
-    //ballFollowerButton = new JoystickButton(driveStick, 7);
-    ballSeekerButton   = new JoystickButton(driveStick, 12);
-    drivePipelineButton = new JoystickButton(driveStick, 2);
-    //turnToAngleButton   = new JoystickButton(driveStick, 10);
+    toggleHatchIntake  = new JoystickButton(intakeStick, 3);
+    reverseBallButton  = new JoystickButton(intakeStick, 1);
+    shootBallButton    = new JoystickButton(intakeStick, 2);
+    seekTapeButton     = new JoystickButton(driveController, 3);
+    ballSeekerButton   = new JoystickButton(driveController, 2);
+    drivePipelineButton = new JoystickButton(driveController, 4);
+    setLowGoalHatchButton = new JoystickButton(intakeStick, 11);
+    setLowGoalBallButton  = new JoystickButton(intakeStick, 12);
+    setMidGoalHatchButton = new JoystickButton(intakeStick, 9);
+    setMidGoalBallButton = new JoystickButton(intakeStick, 10);
+    setHighGoalHatchButton = new JoystickButton(intakeStick, 7);
+    setHighGoalBallButton  = new JoystickButton(intakeStick, 8);
+    setNeutralArmButton    = new JoystickButton(intakeStick, 6);
+    setNeutralTwo = new JoystickButton(intakeStick, 5);
+    setHatchTwo  = new JoystickButton(intakeStick, 4);
+    
+    shiftGear = new JoystickButton(driveController, 6);
     toggleHatchIntake.whenPressed(new toggleHatchIntakeCommand());
     shootBallButton.whileHeld(new RunIntakeCommand());
     reverseBallButton.whileHeld(new ReverseIntakeMotorsCommand());
-    //resetNavxButton.whenPressed(new ResetNavxCommand());
-    //drivePipelineButton.whenPressed(new ChangeToDrivePipelineCommand());
-    //ballFollowerButton.whileHeld(new BallFollower());
     ballSeekerButton.whileHeld(new SeekBallCommand());
-    //turnToAngleButton.whenPressed(new TurnToAngleCommand(100));
     seekTapeButton.whileHeld(new SeekTapeCommand());
-  }
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
-  // Joystick stick = new Joystick(port);
-  // Button button = new JoystickButton(stick, buttonNumber);
+    setLowGoalHatchButton.whenPressed(new HatchGoalState(ArmSetpoints.kLowGoal));
+    setLowGoalBallButton.whenPressed(new BallStateCommand(ArmSetpoints.kLowGoal));
+    setMidGoalHatchButton.whenPressed(new HatchGoalState(ArmSetpoints.kMidGoal));
+    setMidGoalBallButton.whenPressed(new BallStateCommand(ArmSetpoints.kMidGoal));
+    setHighGoalHatchButton.whenPressed(new HatchGoalState(ArmSetpoints.kHighGoal));
+    setHighGoalBallButton.whenPressed(new BallStateCommand(ArmSetpoints.kHighGoal));
+    setNeutralArmButton.whenPressed(new HatchGoalState(ArmSetpoints.kNeutral));
+    shiftGear.whenPressed(new shiftGear());
+    setNeutralTwo.whenPressed(new HatchGoalState(ArmSetpoints.kNeutral));
+    setHatchTwo.whenPressed(new toggleHatchIntakeCommand());
+  }  
 
-  // There are a few additional built in buttons you can use. Additionally,
-  // by subclassing Button you can create custom triggers and bind those to
-  // commands the same as any other Button.
-  //// TRIGGERING COMMANDS WITH BUTTONS
-  // Once you have a button, it's trivial to bind it to a button in one of
-  // three ways:
-
-  // Start the command when the button is pressed and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenPressed(new ExampleCommand());
-
-  // Run the command while the button is being held down and interrupt it once
-  // the button is released.
-  // button.whileHeld(new ExampleCommand());
-
-  // Start the command when the button is released and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenReleased(new ExampleCommand());
-
-  //private XboxController driveController = new XboxController(0);
-  
-
-  public Joystick getDriveController()
-  {return driveStick;}
+  public XboxController getDriveController()
+  {return driveController;}
   /*public Joystick getControlStick()
   {return controlStick;}*/
 
-  public XboxController getWhatevs()
-  {return whateves;}
-  
+  public Joystick getIntakeController()
+  {return intakeStick;}
+  //haha i am the code prankster and i have pranked your code
 }

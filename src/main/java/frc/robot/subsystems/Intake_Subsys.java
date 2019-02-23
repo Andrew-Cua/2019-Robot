@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.utilities.*;
-import frc.robot.utilities.StateControl.IIntakeState;
-import frc.robot.utilities.StateControl.IntakeStates.TeleopControlIntakeState;
 import frc.robot.subsystems.Arm_Subsys.ArmSetpoints;
 import frc.robot.commands.*;
 public class Intake_Subsys extends Subsystem
@@ -25,10 +23,6 @@ public class Intake_Subsys extends Subsystem
 
     private TalonSRX leftIntakeMotor;
     private TalonSRX rightIntakeMotor;
-    private E3Talon intakeEffector;
-
-    private IIntakeState teleopControl;
-    private IIntakeState state;
     private Intake_Subsys()
     {
         //this.shootPiston = new Solenoid(RobotMap.extendChannel);
@@ -36,14 +30,6 @@ public class Intake_Subsys extends Subsystem
         this.rightIntakeMotor = new TalonSRX(12);
         //this.intakeEffector   = new E3Talon(13, FeedbackDevice.CTRE_MagEncoder_Relative, false);
         rightIntakeMotor.setInverted(true);
-        this.teleopControl = new TeleopControlIntakeState(this);
-        this.state = teleopControl;
-    }
-
-    public void controlLoop()
-    {
-        state.setIntakeToAngle();
-        state.updateSmartDashboard();
     }
 
 
@@ -61,7 +47,7 @@ public class Intake_Subsys extends Subsystem
     }
     public void reverseIntakeMotors()
     {
-        rightIntakeMotor.set(ControlMode.PercentOutput, -0.75);
+        rightIntakeMotor.set(ControlMode.PercentOutput, -0.90);
     }
 
     public static Intake_Subsys getInstance()
