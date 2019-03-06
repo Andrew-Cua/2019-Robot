@@ -67,12 +67,12 @@ public class Arm_Subsys extends Subsystem
         setState(ArmSetpoints.kNeutral);
         masterArm = new TalonSRX(RobotMap.armMaster);
         slaveArm  = new TalonSRX(RobotMap.armSlave);
-        masterArm.setInverted(InvertType.InvertMotorOutput);
+        //masterArm.setInverted(InvertType.InvertMotorOutput);
         slaveArm.follow(masterArm);
         slaveArm.setInverted(InvertType.OpposeMaster);
         masterArm.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-        masterArm.setSensorPhase(true);
-        masterArm.configMotionCruiseVelocity(700);
+        masterArm.setSensorPhase(false);
+        masterArm.configMotionCruiseVelocity(380);
         masterArm.configMotionAcceleration(500);
         masterArm.config_kF(0, 5.05);
         masterArm.config_kP(0, 5.1);
